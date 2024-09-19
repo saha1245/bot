@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .chat-container {
+            width: 350px;
+            height: 500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+        .chat-header {
+            background-color: #003366;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #e6f2ff;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        #send-button {
+            padding: 5px 10px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">College Chatbot</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your question...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        function addMessage(message, isUser) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getBotResponse(userMessage) {
+            const lowerCaseMessage = userMessage.toLowerCase();
+            if (lowerCaseMessage.includes('admission')) {
+                return "For admission inquiries, please visit our Admissions Office or check our website's Admissions page for detailed information about the application process, requirements, and deadlines.";
+            } else if (lowerCaseMessage.includes('courses') || lowerCaseMessage.includes('programs')) {
+                return "We offer a wide range of undergraduate and graduate programs. You can find a complete list of our courses and programs on our Academic Programs page.";
+            } else if (lowerCaseMessage.includes('tuition') || lowerCaseMessage.includes('fees')) {
+                return "Tuition and fees vary depending on the program and student status. Please check our Financial Services page for detailed information about costs and payment options.";
+            } else if (lowerCaseMessage.includes('campus') || lowerCaseMessage.includes('facilities')) {
+                return "Our campus features state-of-the-art classrooms, laboratories, libraries, sports facilities, and student housing. Take a virtual tour on our website to explore our campus!";
+            } else if (lowerCaseMessage.includes('scholarship')) {
+                return "We offer various scholarships based on academic merit, need, and special talents. Visit our Financial Aid office or check the Scholarships section on our website for more information.";
+            } else {
+                return "I'm sorry, I don't have specific information about that. Please check our website or contact our admissions office for more detailed assistance.";
+            }
+        }
+
+        function handleUserInput() {
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                addMessage(userMessage, true);
+                userInput.value = '';
+
+                setTimeout(() => {
+                    const botResponse = getBotResponse(userMessage);
+                    addMessage(botResponse, false);
+                }, 500);
+            }
+        }
+
+        sendButton.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+        // Initial bot message
+        addMessage("Hello! I'm the college chatbot. How can I assist you today?", false);
+    </script>
+</body>
+</html>
